@@ -26,197 +26,197 @@ RUN git clone https://github.com/xianyi/OpenBLAS.git /tmp/OpenBLAS \
  && make install \
  && rm -rf /tmp/OpenBLAS
 
-# # Install Jupyter
-# RUN easy_install3 pip \
-#  && pip install 'notebook==4.2.1' jupyter
+# # # Install Jupyter
+# # RUN easy_install3 pip \
+# #  && pip install 'notebook==4.2.1' jupyter
 
-# Install Torch
-ARG TORCH_DISTRO_COMMIT=9c2ef7f185c682ea333e06654cb6e5b67dfe7cd2
-RUN git clone https://github.com/torch/distro.git ~/torch --recursive \
- && cd ~/torch \
- && git checkout "$TORCH_DISTRO_COMMIT" \
- && ./install.sh
+# # Install Torch
+# ARG TORCH_DISTRO_COMMIT=9c2ef7f185c682ea333e06654cb6e5b67dfe7cd2
+# RUN git clone https://github.com/torch/distro.git ~/torch --recursive \
+#  && cd ~/torch \
+#  && git checkout "$TORCH_DISTRO_COMMIT" \
+#  && ./install.sh
 
-# Export environment variables manually
-ENV LUA_PATH='/root/.luarocks/share/lua/5.1/?.lua;/root/.luarocks/share/lua/5.1/?/init.lua;/root/torch/install/share/lua/5.1/?.lua;/root/torch/install/share/lua/5.1/?/init.lua;./?.lua;/root/torch/install/share/luajit-2.1.0-alpha/?.lua;/usr/local/share/lua/5.1/?.lua;/usr/local/share/lua/5.1/?/init.lua' \
-    LUA_CPATH='/root/.luarocks/lib/lua/5.1/?.so;/root/torch/install/lib/lua/5.1/?.so;./?.so;/usr/local/lib/lua/5.1/?.so;/usr/local/lib/lua/5.1/loadall.so' \
-    PATH=/root/torch/install/bin:$PATH \
-    LD_LIBRARY_PATH=/root/torch/install/lib:$LD_LIBRARY_PATH \
-    DYLD_LIBRARY_PATH=/root/torch/install/lib:$DYLD_LIBRARY_PATH
+# # Export environment variables manually
+# ENV LUA_PATH='/root/.luarocks/share/lua/5.1/?.lua;/root/.luarocks/share/lua/5.1/?/init.lua;/root/torch/install/share/lua/5.1/?.lua;/root/torch/install/share/lua/5.1/?/init.lua;./?.lua;/root/torch/install/share/luajit-2.1.0-alpha/?.lua;/usr/local/share/lua/5.1/?.lua;/usr/local/share/lua/5.1/?/init.lua' \
+#     LUA_CPATH='/root/.luarocks/lib/lua/5.1/?.so;/root/torch/install/lib/lua/5.1/?.so;./?.so;/usr/local/lib/lua/5.1/?.so;/usr/local/lib/lua/5.1/loadall.so' \
+#     PATH=/root/torch/install/bin:$PATH \
+#     LD_LIBRARY_PATH=/root/torch/install/lib:$LD_LIBRARY_PATH \
+#     DYLD_LIBRARY_PATH=/root/torch/install/lib:$DYLD_LIBRARY_PATH
 
-# Install GTK libraries
-RUN apt-get update \
- && apt-get install -y libgtk2.0-dev libcanberra-gtk-module
-
-# Install OpenCV and Lua bindings
-RUN cd /tmp \
- && wget -q https://github.com/Itseez/opencv/archive/3.1.0.zip \
- && unzip 3.1.0.zip \
- && mkdir opencv-3.1.0/build \
- && cd opencv-3.1.0/build \
- && cmake -D WITH_CUDA=off -D WITH_OPENCL=off -D BUILD_SHARED_LIBS=off \
-      -D CMAKE_CXX_FLAGS=-fPIC -D WITH_QT=off -D WITH_VTK=off -D WITH_GTK=on \
-      -D WITH_OPENGL=off -D CMAKE_BUILD_TYPE=RELEASE \
-      -D CMAKE_INSTALL_PREFIX=/usr/local .. \
- && make -j $(getconf _NPROCESSORS_ONLN) \
- && make install \
- && rm -rf /tmp/3.1.0.zip /tmp/opencv-3.1.0
-RUN luarocks install cv
-
-# Install FFmpeg and Lua bindings
-RUN apt-get update \
- && apt-get install -y \
-    libavformat-dev \
-    libavcodec-dev \
-    libavutil-dev \
-    libavfilter-dev \
-    ffmpeg \
-    pkg-config
-ARG TORCHVID_COMMIT=8dd49d6bc9279278fe438cf8a6d7bcfe0c58a7ab
-RUN git clone https://github.com/anibali/torchvid.git /tmp/torchvid \
- && cd /tmp/torchvid \
- && git checkout "$TORCHVID_COMMIT" \
- && luarocks make rockspecs/torchvid-scm-0.rockspec \
- && rm -rf /tmp/torchvid
-
-# Install HDF5 and Lua bindings
+# # Install GTK libraries
 # RUN apt-get update \
-#  && apt-get install -y libhdf5-dev hdf5-tools
-RUN mkdir -p /tmp/hdf5 \
- && cd /tmp/hdf5 \
- && wget -q https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.0-patch1/src/hdf5-1.10.0-patch1.tar.gz \
- && tar xzf hdf5-1.10.0-patch1.tar.gz \
- && cd hdf5-1.10.0-patch1 \
- && ./configure --prefix=/usr/local --with-default-api-version=v18 \
- && make \
- && make install \
- && rm -rf /tmp/hdf5
+#  && apt-get install -y libgtk2.0-dev libcanberra-gtk-module
 
-ARG TORCH_HDF5_COMMIT=dd6b2cd6f56b17403bf46174cc84186cb6416c14
-RUN git clone https://github.com/anibali/torch-hdf5.git /tmp/torch-hdf5 \
- && cd /tmp/torch-hdf5 \
- && git checkout "$TORCH_HDF5_COMMIT" \
- && luarocks make hdf5-0-0.rockspec \
- && rm -rf /tmp/torch-hdf5
+# # Install OpenCV and Lua bindings
+# RUN cd /tmp \
+#  && wget -q https://github.com/Itseez/opencv/archive/3.1.0.zip \
+#  && unzip 3.1.0.zip \
+#  && mkdir opencv-3.1.0/build \
+#  && cd opencv-3.1.0/build \
+#  && cmake -D WITH_CUDA=off -D WITH_OPENCL=off -D BUILD_SHARED_LIBS=off \
+#       -D CMAKE_CXX_FLAGS=-fPIC -D WITH_QT=off -D WITH_VTK=off -D WITH_GTK=on \
+#       -D WITH_OPENGL=off -D CMAKE_BUILD_TYPE=RELEASE \
+#       -D CMAKE_INSTALL_PREFIX=/usr/local .. \
+#  && make -j $(getconf _NPROCESSORS_ONLN) \
+#  && make install \
+#  && rm -rf /tmp/3.1.0.zip /tmp/opencv-3.1.0
+# RUN luarocks install cv
 
-# Install Moses for utilities
-RUN luarocks install moses
+# # Install FFmpeg and Lua bindings
+# RUN apt-get update \
+#  && apt-get install -y \
+#     libavformat-dev \
+#     libavcodec-dev \
+#     libavutil-dev \
+#     libavfilter-dev \
+#     ffmpeg \
+#     pkg-config
+# ARG TORCHVID_COMMIT=8dd49d6bc9279278fe438cf8a6d7bcfe0c58a7ab
+# RUN git clone https://github.com/anibali/torchvid.git /tmp/torchvid \
+#  && cd /tmp/torchvid \
+#  && git checkout "$TORCHVID_COMMIT" \
+#  && luarocks make rockspecs/torchvid-scm-0.rockspec \
+#  && rm -rf /tmp/torchvid
 
-# Install JSON parser
-RUN luarocks install lua-cjson
+# # Install HDF5 and Lua bindings
+# # RUN apt-get update \
+# #  && apt-get install -y libhdf5-dev hdf5-tools
+# RUN mkdir -p /tmp/hdf5 \
+#  && cd /tmp/hdf5 \
+#  && wget -q https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.0-patch1/src/hdf5-1.10.0-patch1.tar.gz \
+#  && tar xzf hdf5-1.10.0-patch1.tar.gz \
+#  && cd hdf5-1.10.0-patch1 \
+#  && ./configure --prefix=/usr/local --with-default-api-version=v18 \
+#  && make \
+#  && make install \
+#  && rm -rf /tmp/hdf5
 
-# Install XML parser
-RUN luarocks install luaxpath
+# ARG TORCH_HDF5_COMMIT=dd6b2cd6f56b17403bf46174cc84186cb6416c14
+# RUN git clone https://github.com/anibali/torch-hdf5.git /tmp/torch-hdf5 \
+#  && cd /tmp/torch-hdf5 \
+#  && git checkout "$TORCH_HDF5_COMMIT" \
+#  && luarocks make hdf5-0-0.rockspec \
+#  && rm -rf /tmp/torch-hdf5
 
-# Install CSV parser
-RUN luarocks install csv
+# # Install Moses for utilities
+# RUN luarocks install moses
 
-# Install automatic differentiation library
-RUN luarocks install autograd
+# # Install JSON parser
+# RUN luarocks install lua-cjson
 
-# Install recurrent neural network modules
-RUN luarocks install rnn
+# # Install XML parser
+# RUN luarocks install luaxpath
 
-# Install unsupervised learning modules (includes PCA)
-RUN luarocks install unsup
+# # Install CSV parser
+# RUN luarocks install csv
 
-# Install fast t-SNE module
-RUN luarocks install https://raw.githubusercontent.com/DmitryUlyanov/Multicore-TSNE/master/torch/tsne-1.0-0.rockspec
+# # Install automatic differentiation library
+# RUN luarocks install autograd
 
-# Install HTTP client
-RUN luarocks install httpclient
+# # Install recurrent neural network modules
+# RUN luarocks install rnn
 
-# Install Lua POSIX bindings
-RUN unset LIBRARY_PATH && luarocks install luaposix
+# # Install unsupervised learning modules (includes PCA)
+# RUN luarocks install unsup
 
-# Install random number generator which allows multiple RNG instances
-RUN luarocks install lrandom
+# # Install fast t-SNE module
+# RUN luarocks install https://raw.githubusercontent.com/DmitryUlyanov/Multicore-TSNE/master/torch/tsne-1.0-0.rockspec
 
-# Install iTorch
-RUN luarocks install itorch
+# # Install HTTP client
+# RUN luarocks install httpclient
 
-# Install helpers for loading datasets
-RUN luarocks install dataload
+# # Install Lua POSIX bindings
+# RUN unset LIBRARY_PATH && luarocks install luaposix
 
-# Install GraphicsMagick and Lua bindings
-RUN apt-get update && apt-get install -y graphicsmagick libgraphicsmagick1-dev
-RUN luarocks install graphicsmagick
+# # Install random number generator which allows multiple RNG instances
+# RUN luarocks install lrandom
 
-# Install neural network analysis library
-RUN luarocks install optnet
+# # Install iTorch
+# RUN luarocks install itorch
 
-# Install Lua web server
-RUN luarocks install lzlib ZLIB_LIBDIR=/lib/x86_64-linux-gnu
-RUN luarocks install pegasus
+# # Install helpers for loading datasets
+# RUN luarocks install dataload
 
-# Install Base64 library
-RUN luarocks install lbase64
+# # Install GraphicsMagick and Lua bindings
+# RUN apt-get update && apt-get install -y graphicsmagick libgraphicsmagick1-dev
+# RUN luarocks install graphicsmagick
 
-# Install remote debugger for Lua
-RUN luarocks install https://gist.githubusercontent.com/anibali/d8a54118680ec0c300680aa12cb25e9d/raw/34917d844a19a44f58c720f5e2563e7baef23029/mobdebug-scm-1.rockspec
+# # Install neural network analysis library
+# RUN luarocks install optnet
 
-# Install weight initialisation helper
-RUN luarocks install nninit
+# # Install Lua web server
+# RUN luarocks install lzlib ZLIB_LIBDIR=/lib/x86_64-linux-gnu
+# RUN luarocks install pegasus
 
-# Install Torchnet framework
-RUN luarocks install torchnet
+# # Install Base64 library
+# RUN luarocks install lbase64
 
-# Install Spatial Transformer Network library
-RUN luarocks install https://raw.githubusercontent.com/qassemoquab/stnbhwd/master/stnbhwd-scm-1.rockspec
+# # Install remote debugger for Lua
+# RUN luarocks install https://gist.githubusercontent.com/anibali/d8a54118680ec0c300680aa12cb25e9d/raw/34917d844a19a44f58c720f5e2563e7baef23029/mobdebug-scm-1.rockspec
 
-# Install Stitch for executing and rendering markdown files with code in them
-RUN cd /tmp \
- && pip install typing \
- && wget -q https://github.com/jgm/pandoc/releases/download/1.18/pandoc-1.18-1-amd64.deb \
- && dpkg -i pandoc-1.18-1-amd64.deb \
- && git clone https://github.com/pystitch/stitch.git \
- && cd stitch \
- && git checkout 56b2107df8c79141cad8514ff3b954761b98156a \
- && python3 setup.py install \
- && rm -rf /tmp/stitch
-ENV LC_ALL=C.UTF-8
+# # Install weight initialisation helper
+# RUN luarocks install nninit
 
-# Install Caffe model loader
-RUN apt-get update \
- && apt-get install -y libprotobuf-dev protobuf-compiler
-RUN luarocks install loadcaffe
+# # Install Torchnet framework
+# RUN luarocks install torchnet
 
-# Install module for loading Matlab data files
-RUN apt-get update \
- && apt-get install -y libmatio2 \
- && luarocks install matio
+# # Install Spatial Transformer Network library
+# RUN luarocks install https://raw.githubusercontent.com/qassemoquab/stnbhwd/master/stnbhwd-scm-1.rockspec
 
-# Layer-wise learning rate module
-RUN luarocks install nnlr
+# # Install Stitch for executing and rendering markdown files with code in them
+# RUN cd /tmp \
+#  && pip install typing \
+#  && wget -q https://github.com/jgm/pandoc/releases/download/1.18/pandoc-1.18-1-amd64.deb \
+#  && dpkg -i pandoc-1.18-1-amd64.deb \
+#  && git clone https://github.com/pystitch/stitch.git \
+#  && cd stitch \
+#  && git checkout 56b2107df8c79141cad8514ff3b954761b98156a \
+#  && python3 setup.py install \
+#  && rm -rf /tmp/stitch
+# ENV LC_ALL=C.UTF-8
 
-# Install distributions bindings
-RUN luarocks install https://raw.github.com/deepmind/torch-distributions/master/distributions-0-0.rockspec
+# # Install Caffe model loader
+# RUN apt-get update \
+#  && apt-get install -y libprotobuf-dev protobuf-compiler
+# RUN luarocks install loadcaffe
 
-# Install manifold
-RUN apt-get update \
- && apt-get install -y libatlas3-base \
- && luarocks install manifold
+# # Install module for loading Matlab data files
+# RUN apt-get update \
+#  && apt-get install -y libmatio2 \
+#  && luarocks install matio
 
-# Clean up
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+# # Layer-wise learning rate module
+# RUN luarocks install nnlr
 
-# Set working dir
-RUN mkdir /root/notebook
-WORKDIR /root/notebook
+# # Install distributions bindings
+# RUN luarocks install https://raw.github.com/deepmind/torch-distributions/master/distributions-0-0.rockspec
+
+# # Install manifold
+# RUN apt-get update \
+#  && apt-get install -y libatlas3-base \
+#  && luarocks install manifold
+
+# # Clean up
+# RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# # Set working dir
+# RUN mkdir /root/notebook
+# WORKDIR /root/notebook
 
 
 
-# Install CuDNN with Torch bindings
-RUN luarocks install https://raw.githubusercontent.com/soumith/cudnn.torch/R5/cudnn-scm-1.rockspec
+# # Install CuDNN with Torch bindings
+# RUN luarocks install https://raw.githubusercontent.com/soumith/cudnn.torch/R5/cudnn-scm-1.rockspec
 
 
-# # Jupyter config
-# RUN jupyter notebook --generate-config \
-#  && echo "\nimport os\nfrom IPython.lib import passwd\npassword = os.environ.get('JUPYTER_PASSWORD')\nif password:\n  c.NotebookApp.password = passwd(password)\n" \
-#     >> ~/.jupyter/jupyter_notebook_config.py
-# COPY notebook.json /root/.jupyter/nbconfig/
+# # # Jupyter config
+# # RUN jupyter notebook --generate-config \
+# #  && echo "\nimport os\nfrom IPython.lib import passwd\npassword = os.environ.get('JUPYTER_PASSWORD')\nif password:\n  c.NotebookApp.password = passwd(password)\n" \
+# #     >> ~/.jupyter/jupyter_notebook_config.py
+# # COPY notebook.json /root/.jupyter/nbconfig/
 
-# # Expose Jupyter port
-# EXPOSE 8888
+# # # Expose Jupyter port
+# # EXPOSE 8888
 
-# CMD ["jupyter", "notebook", "--no-browser", "--ip=0.0.0.0"]
+# # CMD ["jupyter", "notebook", "--no-browser", "--ip=0.0.0.0"]
