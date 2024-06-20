@@ -7,8 +7,8 @@ ADD https://github.com/krallin/tini/releases/download/v0.10.0/tini /tini
 RUN chmod +x /tini
 ENTRYPOINT ["/tini", "--"]
 
-RUN rm /etc/apt/sources.list.d/cuda.list
-RUN rm /etc/apt/sources.list.d/nvidia-ml.list
+# RUN rm /etc/apt/sources.list.d/cuda.list
+# RUN rm /etc/apt/sources.list.d/nvidia-ml.list
 
 # Install dependencies for OpenBLAS, Jupyter, and Torch
 RUN apt-get update \
