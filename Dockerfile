@@ -14,13 +14,13 @@ FROM pytorch/pytorch:1.9.0-cuda10.2-cudnn7-devel
 # RUN rm /etc/apt/sources.list.d/cuda.list
 # RUN rm /etc/apt/sources.list.d/nvidia-ml.list
 
-# Install dependencies for OpenBLAS, Jupyter, and Torch
-RUN apt-get update \
- && apt-get install -y \
-    build-essential git gfortran \
-    python3 python3-setuptools python3-dev \
-    cmake curl wget unzip libreadline-dev libjpeg-dev libpng-dev ncurses-dev \
-    imagemagick gnuplot gnuplot-x11 libssl-dev libzmq3-dev graphviz sudo lsb-release
+# # Install dependencies for OpenBLAS, Jupyter, and Torch
+# RUN apt-get update \
+#  && apt-get install -y \
+#     build-essential git gfortran \
+#     python3 python3-setuptools python3-dev \
+#     cmake curl wget unzip libreadline-dev libjpeg-dev libpng-dev ncurses-dev \
+#     imagemagick gnuplot gnuplot-x11 libssl-dev libzmq3-dev graphviz sudo lsb-release
 
 # # Install OpenBLAS
 # RUN git clone https://github.com/xianyi/OpenBLAS.git /tmp/OpenBLAS \
