@@ -1,5 +1,5 @@
-FROM nvidia/cuda:8.0-cudnn5-devel
-
+# FROM nvidia/cuda:8.0-cudnn5-devel
+FROM nvidia/cuda:11.1.1-cudnn8-devel
 # Use Tini as the init process with PID 1
 ADD https://github.com/krallin/tini/releases/download/v0.10.0/tini /tini
 RUN chmod +x /tini
