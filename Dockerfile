@@ -1,4 +1,11 @@
-FROM nvidia/cuda:10.2-cudnn7-devel-ubuntu18.04
+# FROM nvidia/cuda:10.2-cudnn7-devel-ubuntu18.04
+# FROM nvidia/cuda:8.0-cudnn5-devel
+# FROM nvidia/cuda:11.1.1-cudnn8-devel
+# FROM eywalker/nvidia-cuda:8.0-cudnn5-devel
+
+# FROM nvidia/cuda:11.3.1-cudnn8-devel-ubuntu16.04
+
+FROM pytorch/pytorch:1.9.0-cuda10.2-cudnn7-devel
 
 # update nvidia public key
 RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/3bf863cc.pub
