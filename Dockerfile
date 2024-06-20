@@ -1,6 +1,9 @@
 # FROM nvidia/cuda:8.0-cudnn5-devel
 # FROM nvidia/cuda:11.1.1-cudnn8-devel
-FROM eywalker/nvidia-cuda:8.0-cudnn5-devel
+# FROM eywalker/nvidia-cuda:8.0-cudnn5-devel
+
+FROM nvidia/cuda:11.3.1-cudnn8-devel-ubuntu16.04
+
 
 # Use Tini as the init process with PID 1
 ADD https://github.com/krallin/tini/releases/download/v0.10.0/tini /tini
@@ -16,7 +19,7 @@ RUN apt-get update \
     build-essential git gfortran \
     python3 python3-setuptools python3-dev \
     cmake curl wget unzip libreadline-dev libjpeg-dev libpng-dev ncurses-dev \
-    imagemagick gnuplot gnuplot-x11 libssl-dev libzmq3-dev graphviz
+    imagemagick gnuplot gnuplot-x11 libssl-dev libzmq3-dev graphviz sudo
 
 # Install OpenBLAS
 RUN git clone https://github.com/xianyi/OpenBLAS.git /tmp/OpenBLAS \
