@@ -26,9 +26,9 @@ RUN git clone https://github.com/xianyi/OpenBLAS.git /tmp/OpenBLAS \
  && make install \
  && rm -rf /tmp/OpenBLAS
 
-# Install Jupyter
-RUN easy_install3 pip \
- && pip install 'notebook==4.2.1' jupyter
+# # Install Jupyter
+# RUN easy_install3 pip \
+#  && pip install 'notebook==4.2.1' jupyter
 
 # Install Torch
 ARG TORCH_DISTRO_COMMIT=9c2ef7f185c682ea333e06654cb6e5b67dfe7cd2
