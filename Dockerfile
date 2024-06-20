@@ -2,13 +2,14 @@
 # FROM nvidia/cuda:11.1.1-cudnn8-devel
 # FROM eywalker/nvidia-cuda:8.0-cudnn5-devel
 
-FROM nvidia/cuda:11.3.1-cudnn8-devel-ubuntu16.04
+# FROM nvidia/cuda:11.3.1-cudnn8-devel-ubuntu16.04
 
+FROM pytorch/pytorch:1.9.0-cuda10.2-cudnn7-devel
 
-# Use Tini as the init process with PID 1
-ADD https://github.com/krallin/tini/releases/download/v0.10.0/tini /tini
-RUN chmod +x /tini
-ENTRYPOINT ["/tini", "--"]
+# # Use Tini as the init process with PID 1
+# ADD https://github.com/krallin/tini/releases/download/v0.10.0/tini /tini
+# RUN chmod +x /tini
+# ENTRYPOINT ["/tini", "--"]
 
 # RUN rm /etc/apt/sources.list.d/cuda.list
 # RUN rm /etc/apt/sources.list.d/nvidia-ml.list
@@ -19,15 +20,15 @@ RUN apt-get update \
     build-essential git gfortran \
     python3 python3-setuptools python3-dev \
     cmake curl wget unzip libreadline-dev libjpeg-dev libpng-dev ncurses-dev \
-    imagemagick gnuplot gnuplot-x11 libssl-dev libzmq3-dev graphviz sudo
+    imagemagick gnuplot gnuplot-x11 libssl-dev libzmq3-dev graphviz sudo lsb-release
 
-# Install OpenBLAS
-RUN git clone https://github.com/xianyi/OpenBLAS.git /tmp/OpenBLAS \
- && cd /tmp/OpenBLAS \
- && [ $(getconf _NPROCESSORS_ONLN) = 1 ] && export USE_OPENMP=0 || export USE_OPENMP=1 \
- && make -j $(getconf _NPROCESSORS_ONLN) NO_AFFINITY=1 \
- && make install \
- && rm -rf /tmp/OpenBLAS
+# # Install OpenBLAS
+# RUN git clone https://github.com/xianyi/OpenBLAS.git /tmp/OpenBLAS \
+#  && cd /tmp/OpenBLAS \
+#  && [ $(getconf _NPROCESSORS_ONLN) = 1 ] && export USE_OPENMP=0 || export USE_OPENMP=1 \
+#  && make -j $(getconf _NPROCESSORS_ONLN) NO_AFFINITY=1 \
+#  && make install \
+#  && rm -rf /tmp/OpenBLAS
 
 # # # Install Jupyter
 # # RUN easy_install3 pip \
