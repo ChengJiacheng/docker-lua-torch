@@ -30,5 +30,6 @@ ENV LUA_CPATH='/root/torch/install/lib/?.so;'$LUA_CPATH
 
 WORKDIR /root/
 
+RUN apt install -y graphicsmagick
 RUN git config --global url."https://".insteadOf git:// 
 RUN luarocks install graphicsmagick
